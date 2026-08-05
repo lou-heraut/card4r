@@ -123,6 +123,16 @@ Les arguments `expand_overwrite`, `rmNApct`, `rm_duplicates` et `dev` de
 `CARD_extraction` n'ont pas d'équivalent : ils ont disparu au portage.
 card4r ne les accepte donc pas, plutôt que de les ignorer en silence.
 
+## L'écosystème
+
+| | |
+|---|---|
+| [card](https://github.com/lou-heraut/card) | le recueil de fiches, en Python |
+| [stase](https://github.com/lou-heraut/stase) | le moteur d'agrégation et de tendance |
+| **card4r** | le même recueil, appelé depuis R (vous êtes ici) |
+| [card-api](https://github.com/lou-heraut/card-api) | le service web, sur les débits Hub'Eau |
+| [CARD-R](https://github.com/lou-heraut/CARD-R) · [EXstat](https://github.com/lou-heraut/EXstat) | les paquets R historiques, remplacés |
+
 ## Licence et citation
 
 GPL-3. Le corpus, le moteur et ce paquet ont chacun leur `CITATION.cff`.
