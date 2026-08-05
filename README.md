@@ -1,11 +1,11 @@
 # card4r
 
-**card4r** donne accès depuis R au recueil de fiches hydroclimatiques
-[card](https://github.com/lou-heraut/card) : étiages, crues,
-saisonnalité, changement climatique, sur vos propres données.
+**card4r** gives R access to the [card](https://github.com/lou-heraut/card)
+collection of hydroclimatic variables: low flows, floods, seasonality,
+climate change, computed on your own data.
 
-Le corpus et le moteur ne sont pas réécrits en R, ils sont **appelés**.
-Un `data.frame` entre, des `data.frame` et leurs métadonnées sortent.
+The collection and the engine are not rewritten in R, they are **called**.
+A `data.frame` goes in, `data.frame`s and their metadata come out.
 
 ## Installation
 
@@ -14,104 +14,102 @@ Un `data.frame` entre, des `data.frame` et leurs métadonnées sortent.
 remotes::install_github("lou-heraut/card4r")
 ```
 
-Il n'y a rien d'autre à installer. Au premier appel, card4r provisionne
-tout seul l'environnement Python dont il a besoin (interpréteur, numpy,
-pandas, scipy, puis `card` et `stase`), via
-[reticulate](https://rstudio.github.io/reticulate/). Comptez quelques
-centaines de mégaoctets et du réseau, une seule fois.
+There is nothing else to install. On the first call, card4r provisions
+the Python environment it needs on its own (interpreter, numpy, pandas,
+scipy, then `card` and `stase`), through
+[reticulate](https://rstudio.github.io/reticulate/). Expect a few hundred
+megabytes and a network connection, once.
 
-Si vous préférez fournir votre propre Python, désignez-le avant de
-charger le paquet et card4r ne provisionnera rien :
+If you would rather supply your own Python, point at it before loading
+the package and card4r will provision nothing:
 
 ```r
-Sys.setenv(RETICULATE_PYTHON = "/chemin/vers/python")
+Sys.setenv(RETICULATE_PYTHON = "/path/to/python")
 ```
 
-C'est aussi la voie à suivre derrière un proxy qui bloque le
-téléchargement, ou sur un poste sans accès réseau.
+That is also the way to go behind a proxy that blocks the download, or on
+a machine without network access.
 
-## Démarrage rapide
+## Quick start
 
 ```r
 library(card4r)
 
-# une chronique journalière : une colonne de dates, une colonne
-# d'identifiant de série, et les colonnes que les fiches demandent
-# (`Q` pour le débit, `T` pour la température...).
-data <- data.frame(date = dates, Q = debits, id = "ma_station")
+# a daily time series: a date column, a series identifier column, and the
+# columns the cards ask for (`Q` for discharge, `T` for temperature...).
+data <- data.frame(date = dates, Q = discharge, id = "my_station")
 
 res <- card_extract(data, cards = c("QA", "VCN10"))
 
 head(res$data$VCN10, 3)
 #           id       date    VCN10
-# 1 ma_station 1970-01-01 2.150247
-# 2 ma_station 1971-01-01 3.421462
-# 3 ma_station 1972-01-01 2.333131
+# 1 my_station 1970-01-01 2.150247
+# 2 my_station 1971-01-01 3.421462
+# 3 my_station 1972-01-01 2.333131
 ```
 
-`res$meta` porte une ligne par variable produite : unité, nom,
-classification, et de quoi retrouver le calcul (voir plus bas).
+`res$meta` holds one row per variable produced: unit, name,
+classification, and what it takes to trace the computation (see below).
 
-## Tendance
+## Trend
 
 ```r
 tr <- card_trend(res)
 tr$data$VCN10[, c("id", "h", "p", "a", "a_relative")]
 #           id    h          p            a a_relative
-# 1 ma_station TRUE 0.04289009 -0.007849947 -0.3451902
+# 1 my_station TRUE 0.04289009 -0.007849947 -0.3451902
 ```
 
-`h` dit si la tendance est significative au seuil demandé, `a` est la
-pente de Sen dans l'unité de la variable et par an, `a_relative` la même
-en pourcentage de la moyenne.
+`h` tells whether the trend is significant at the requested level, `a` is
+the Sen slope in the unit of the variable per year, `a_relative` the same
+as a percentage of the mean.
 
-## Trouver sa fiche
+## Finding a card
 
 ```r
-card_list()                            # toutes les variables
-card_list(phenomenon = "basses eaux")  # par phénomène (fr ou en)
-card_info("VCN10")                     # la fiche, dessinée
+card_list()                          # every variable
+card_list(phenomenon = "low flows")  # by phenomenon (English or French)
+card_info("VCN10")                   # the card, drawn
 ```
 
-Le catalogue complet se consulte aussi
-[en ligne](https://lou-heraut.github.io/card/CARDS.html).
+The full catalogue is also
+[online](https://lou-heraut.github.io/card/CARDS.html).
 
-## Ce qu'un résultat dit de lui-même
+## What a result says about itself
 
 ```r
 res$meta[, c("variable_en", "version", "card_version", "card_commit")]
 #   variable_en version card_version                              card_commit
-# 1          QA     1.0        0.4.0 60812eb3869e2bf6b979898c170b0e72ffd89a56
+# 1          QA     1.0        0.4.0 7ede9638e44e00daea969d7a9797cf773e891ce8
 ```
 
-`version` est celle de la **fiche**, qui change quand ses sorties
-changent ; `card_commit` et `stase_commit` identifient exactement le
-**logiciel** qui a calculé. Un résultat exporté dit donc avec quoi il a
-été produit, ce qui suffit à le citer ou à le rejouer. `card_config()`
-affiche la même chose sans lancer de calcul.
+`version` is that of the **card**, which changes when its outputs change;
+`card_commit` and `stase_commit` identify exactly the **software** that
+computed. An exported result therefore says what produced it, which is
+what it takes to cite it or to replay it. `card_config()` prints the same
+without running a computation.
 
-## Ce que card4r ne fait pas, et ne fera pas
+## What card4r does not do, and will not do
 
-- **Écrire une fiche en R.** Une fiche est un fichier YAML du corpus, et
-  c'est ce qui permet qu'il n'y ait qu'une définition pour R et pour
-  Python. Contribuer une fiche se fait dans
+- **Write a card in R.** A card is a YAML file of the collection, and
+  that is what keeps a single definition for both R and Python.
+  Contributing a card happens in
   [card](https://github.com/lou-heraut/card).
-- **Republier les fonctions hydro** (`compute_FDC`, `get_BFI`...). Elles
-  restent la mécanique interne des fiches.
+- **Re-export the hydrological functions** (`compute_FDC`, `get_BFI`...).
+  They remain the internal machinery of the cards.
 
-Ces deux limites ne sont pas des manques : ce sont elles qui font tenir
-le paquet en trois cents lignes plutôt qu'en un second moteur à
-maintenir.
+These two limits are not gaps: they are what keeps the package at three
+hundred lines instead of a second engine to maintain.
 
-## Et le paquet CARD historique ?
+## What about the historical CARD package?
 
-[CARD](https://github.com/lou-heraut/CARD-R) est le paquet R d'origine,
-d'où card vient. Il reste installable et n'est pas retiré, mais il
-n'évolue plus : la version en cours de développement est du côté de card.
+[CARD](https://github.com/lou-heraut/CARD-R) is the original R package,
+where card comes from. It still installs and is not going away, but it is
+no longer developed: the living version is on the card side.
 
-La bascule ne change pas vos résultats : **vérifié le 2026-08-05, les
-valeurs de `card4r` et de `CARD` coïncident à 1,8e-15 près**, soit la
-précision machine, et ce test tourne avec la suite du paquet.
+Switching does not change your results: **checked on 2026-08-05, values
+from `card4r` and from `CARD` match to 1.8e-15**, machine precision, and
+that test runs with the package suite.
 
 | CARD (R) | card4r |
 |---|---|
@@ -119,22 +117,22 @@ précision machine, et ce test tourne avec la suite du paquet.
 | `CARD_list_all()` | `card_list()` |
 | `CARD_management(...)` | `card_info(...)` |
 
-Les arguments `expand_overwrite`, `rmNApct`, `rm_duplicates` et `dev` de
-`CARD_extraction` n'ont pas d'équivalent : ils ont disparu au portage.
-card4r ne les accepte donc pas, plutôt que de les ignorer en silence.
+The `expand_overwrite`, `rmNApct`, `rm_duplicates` and `dev` arguments of
+`CARD_extraction` have no counterpart: they went away with the port.
+card4r does not accept them, rather than ignore them silently.
 
-## L'écosystème
+## The ecosystem
 
 | | |
 |---|---|
-| [card](https://github.com/lou-heraut/card) | le recueil de fiches, en Python |
-| [stase](https://github.com/lou-heraut/stase) | le moteur d'agrégation et de tendance |
-| **card4r** | le même recueil, appelé depuis R (vous êtes ici) |
-| [card-api](https://github.com/lou-heraut/card-api) | le service web, sur les débits Hub'Eau |
-| [CARD-R](https://github.com/lou-heraut/CARD-R) · [EXstat](https://github.com/lou-heraut/EXstat) | les paquets R historiques, remplacés |
+| [card](https://github.com/lou-heraut/card) | the card collection, in Python |
+| [stase](https://github.com/lou-heraut/stase) | the aggregation and trend engine |
+| **card4r** | the same collection, called from R (you are here) |
+| [card-api](https://github.com/lou-heraut/card-api) | the web service, on Hub'Eau discharge data |
+| [CARD-R](https://github.com/lou-heraut/CARD-R) · [EXstat](https://github.com/lou-heraut/EXstat) | the historical R packages, superseded |
 
-## Licence et citation
+## Licence and citation
 
-GPL-3. Le corpus, le moteur et ce paquet ont chacun leur `CITATION.cff`.
-Citez la ou les **fiches** employées avec leur version, que `res$meta`
-vous donne.
+GPL-3. The collection, the engine and this package each have their own
+`CITATION.cff`. Cite the **cards** you used, with their version, which
+`res$meta` gives you.
