@@ -1,0 +1,25 @@
+Package: card4r
+Version: 0.1.0
+Date: 2026-08-05
+Title: Hydroclimatic Variables from the CARD Collection, in R
+Description: A thin R front to the Python package 'card', which computes
+    hydroclimatic variables (low flows, floods, seasonality, climate
+    change) defined by YAML parameterization files and executed by the
+    'stase' engine. Data goes in as a data frame, data frames and their
+    metadata come out. The corpus and the engine are never reimplemented
+    here: they are called.
+Authors@R: c(
+    person(given = "Louis",
+           family = "Héraut",
+           role = c("cre", "aut"),
+           email = "louis.heraut@inrae.fr",
+           comment = c(affiliation = "INRAE, UR RiverLy")))
+License: GPL-3
+URL: https://github.com/lou-heraut/card4r
+BugReports: https://github.com/lou-heraut/card4r/issues
+Encoding: UTF-8
+Depends: R (>= 4.1)
+Imports: reticulate (>= 1.41)
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
+RoxygenNote: 7.3.2

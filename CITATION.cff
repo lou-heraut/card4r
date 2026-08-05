@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "Si vous utilisez ce logiciel, citez-le comme ci-dessous. Citez aussi les fiches employées, avec leur version, que res$meta vous donne."
+title: "card4r: Hydroclimatic Variables from the CARD Collection, in R"
+abstract: "Front R mince vers le paquet Python card, qui calcule des variables hydroclimatiques définies par des fiches YAML et exécutées par le moteur stase. Le corpus et le moteur ne sont pas réimplémentés en R, ils sont appelés."
+type: software
+authors:
+  - family-names: "Héraut"
+    given-names: "Louis"
+    email: "louis.heraut@inrae.fr"
+    affiliation: "INRAE, UR RiverLy, Villeurbanne, France"
+license: GPL-3.0-or-later
+repository-code: "https://github.com/lou-heraut/card4r"
+version: "0.1.0"
+date-released: "2026-08-05"
+keywords:
+  - hydrology
+  - hydroclimatology
+  - low flows
+  - trend analysis
+  - R
+references:
+  - type: software
+    title: "card"
+    authors:
+      - family-names: "Héraut"
+        given-names: "Louis"
+    repository-code: "https://github.com/lou-heraut/card"
+    notes: "Le corpus de fiches et la bibliothèque appelée par card4r."
