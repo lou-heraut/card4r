@@ -24,7 +24,25 @@ Jamais au milieu d'un chantier. Le numéro vit dans `DESCRIPTION` et dans
 
 ## Non publié
 
-Rien depuis la 0.1.0.
+### Modifié
+
+- **Le README suit la structure de celui de card, sans en recopier le
+  contenu (2026-08-06).** Deux niveaux, les mêmes grandes parties, et
+  l'exemple tourne sur les mêmes données réelles : l'Yzeron à Craponne,
+  chargé depuis Hub'Eau. Il affiche donc **les mêmes nombres que la
+  version Python, au dernier chiffre**, ce qui est l'argument central du
+  paquet et se démontre mieux qu'il ne s'explique.
+
+  Ce qui appartient au CORPUS est renvoyé plutôt que recopié : le
+  catalogue, la grammaire des noms, l'anatomie d'une fiche, l'écriture
+  d'une fiche. Deux textes disant la même chose sur le même corpus
+  finiraient par diverger, et c'est card qui en est la source. Le README
+  fait 225 lignes là où une duplication en aurait fait 500.
+
+  La section d'installation dit aussi ce qu'elle taisait : chaque version
+  de card4r épingle les versions exactes de card et de stase qu'elle
+  appelle, par tag et non par branche, donc deux personnes sur la même
+  version de card4r exécutent le même code. `card_config()` le montre.
 
 ## 0.1.0 (2026-08-05)
 
