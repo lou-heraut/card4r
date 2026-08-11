@@ -59,7 +59,7 @@
 <!-- badges: start -->
 
 <p><strong>card4r</strong> gives R access to the <a href="https://github.com/lou-heraut/card" class="external-link">card</a> collection of hydroclimatic variables: low flows, floods, seasonality, climate change, computed on your own data.</p>
-<p>The collection and the engine are not rewritten in R, they are <strong>called</strong>. A <code>data.frame</code> goes in, <code>data.frame</code>s and their metadata come out. Which means the numbers you get are the same ones, to the last digit, whichever language you call them from.</p>
+<p>The collection and the engine are not rewritten in R, they are <strong>called</strong>. A data frame goes in, data frames and their metadata come out. Which means the numbers are the same, whichever language you call them from.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -176,7 +176,7 @@
 <h2 id="coming-from-the-card-package">Coming from the CARD package<a class="anchor" aria-label="anchor" href="#coming-from-the-card-package"></a>
 </h2>
 <p><a href="https://github.com/lou-heraut/CARD-R" class="external-link">CARD</a> is the original R package, where card comes from. It still installs and is not going away, but it is no longer developed: the living version is on the card side.</p>
-<p>Switching does not change your results. <strong>Checked on 2026-08-05, values from <code>card4r</code> and from <code>CARD</code> match to 1.8e-15</strong>, machine precision, and that comparison runs with this package’s test suite.</p>
+<p>Switching does not change your results: the two packages are run on the same series in this package’s test suite, so the agreement is measured at every release rather than claimed here.</p>
 <table class="table">
 <colgroup>
 <col width="50%">

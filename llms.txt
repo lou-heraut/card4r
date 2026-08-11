@@ -6,9 +6,9 @@ variables: low flows, floods, seasonality, climate change, computed on
 your own data.
 
 The collection and the engine are not rewritten in R, they are
-**called**. A `data.frame` goes in, `data.frame`s and their metadata
-come out. Which means the numbers you get are the same ones, to the last
-digit, whichever language you call them from.
+**called**. A data frame goes in, data frames and their metadata come
+out. Which means the numbers are the same, whichever language you call
+them from.
 
 ## Installation
 
@@ -210,9 +210,9 @@ the bridge, the cost would go from a weekend to a year.
 where card comes from. It still installs and is not going away, but it
 is no longer developed: the living version is on the card side.
 
-Switching does not change your results. **Checked on 2026-08-05, values
-from `card4r` and from `CARD` match to 1.8e-15**, machine precision, and
-that comparison runs with this package’s test suite.
+Switching does not change your results: the two packages are run on the
+same series in this package’s test suite, so the agreement is measured
+at every release rather than claimed here.
 
 | CARD (R) | card4r |
 |----|----|
