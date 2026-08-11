@@ -1,4 +1,6 @@
 ^LICENSE$
 ^\.git$
+^\.github$
 ^CLAUDE\.md$
+^CHANGELOG\.md$
 ^CITATION\.cff$

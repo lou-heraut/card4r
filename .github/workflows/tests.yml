@@ -1,0 +1,88 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Un pont ne se vérifie qu'avec ses deux rives, et c'est ce qui rend cette
+# CI particulière : le vrai risque n'est pas qu'elle échoue, c'est qu'elle
+# passe au vert sans avoir rien vérifié. `skip_sans_python()` saute chaque
+# test du pont quand l'interpréteur ne répond pas, et une suite entièrement
+# sautée est verte. Deux gardes l'empêchent, et elles sont la raison d'être
+# de ce fichier : le pont doit répondre AVANT la suite, et la suite refuse
+# le moindre test sauté.
+
+permissions: read-all
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    name: testthat (R release)
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # Sans elle, `skip_on_cran()` saute tout le pont.
+      NOT_CRAN: true
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::testthat, any::pkgload, any::rcmdcheck
+          needs: check
+
+      # reticulate provisionne l'interpréteur, numpy, pandas, scipy, puis
+      # card et stase depuis leurs tags : quelques centaines de mégaoctets
+      # au premier passage. La clé porte `R/zzz.R`, seul fichier où
+      # `CARD_REF` et `STASE_REF` sont écrits, pour qu'une montée de ref
+      # invalide le cache : sinon la CI validerait l'ancien corpus.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/R/reticulate
+          key: reticulate-${{ runner.os }}-${{ hashFiles('R/zzz.R') }}
+
+      # Première garde. Elle échoue bruyamment si le provisionnement casse,
+      # là où la suite, elle, se contenterait de tout sauter. Elle imprime
+      # aussi ce qui a répondu : en cas de doute sur un résultat de CI, le
+      # journal dit quel corpus et quel moteur ont tourné.
+      - name: Le pont répond
+        run: |
+          Rscript -e '
+            pkgload::load_all(quiet = TRUE)
+            stopifnot(nrow(card_list()) > 0)
+            card_config()
+          '
+
+      # Seconde garde. `stop_on_failure` couvre l'échec, rien ne couvre le
+      # saut : testthat n'a pas de `stop_on_skip`, donc on compte nous-mêmes.
+      - name: Tests
+        run: |
+          Rscript -e '
+            res <- as.data.frame(testthat::test_local(reporter = "summary",
+                                                      stop_on_failure = TRUE))
+            sautes <- sum(res$skipped)
+            cat(nrow(res), "tests,", sautes, "sautes\n")
+            if (sautes > 0) {
+              print(res[res$skipped, c("file", "test")])
+              stop("un test saute est un test qui na rien verifie")
+            }
+          '
+
+      # `--no-tests` : ils viennent de tourner sous les deux gardes, et les
+      # relancer ici les rendrait sautables à nouveau. Ce que ce check
+      # apporte est ailleurs : DESCRIPTION, NAMESPACE, et surtout l'accord
+      # entre le code et les `man/*.Rd`, qui se perd dès qu'on édite une
+      # docstring sans repasser roxygen.
+      - name: R CMD check
+        run: |
+          Rscript -e '
+            rcmdcheck::rcmdcheck(args = c("--no-manual", "--no-tests"),
+                                 error_on = "warning")
+          '

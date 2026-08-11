@@ -1,5 +1,10 @@
 # card4r
 
+<!-- badges: start -->
+[![tests](https://github.com/lou-heraut/card4r/actions/workflows/tests.yml/badge.svg)](https://github.com/lou-heraut/card4r/actions/workflows/tests.yml)
+[![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-bd0000)](https://github.com/lou-heraut/card4r/blob/main/LICENSE)
+<!-- badges: end -->
+
 **card4r** gives R access to the [card](https://github.com/lou-heraut/card)
 collection of hydroclimatic variables: low flows, floods, seasonality,
 climate change, computed on your own data.

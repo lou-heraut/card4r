@@ -24,7 +24,30 @@ Jamais au milieu d'un chantier. Le numéro vit dans `DESCRIPTION` et dans
 
 ## Non publié
 
-Rien depuis la 0.1.1.
+### Ajouté
+
+- **Les tests tournent enfin tout seuls (2026-08-11).** card4r était le
+  seul des quatre dépôts sans intégration continue, alors que c'est celui
+  dont la promesse a le plus besoin d'être éprouvée : les valeurs R et
+  Python coïncident, ce qu'aucune relecture ne peut affirmer. Le workflow
+  installe R, provisionne le Python de reticulate et lance la suite à
+  chaque poussée.
+
+  **Le risque était de passer au vert sans rien vérifier**, et c'est ce
+  qui a dicté la forme du fichier. `skip_sans_python()` saute chaque test
+  du pont quand l'interpréteur ne répond pas, et une suite entièrement
+  sautée est verte : une CI naïve aurait donc annoncé « tests OK » en ne
+  testant rien du tout. Deux gardes l'empêchent. Le pont doit répondre
+  AVANT la suite, dans une étape qui imprime au journal quel corpus et
+  quel moteur ont tourné. Puis la suite refuse le moindre test sauté,
+  compté à la main puisque testthat n'a pas de `stop_on_skip`.
+
+  Le cache du provisionnement porte `R/zzz.R`, seul fichier où
+  `CARD_REF` et `STASE_REF` sont écrits : monter une ref invalide le
+  cache, sans quoi la CI validerait l'ancien corpus. Un `R CMD check`
+  suit, sans les tests qui viennent de tourner sous garde ; ce qu'il
+  apporte est ailleurs, l'accord entre le code et les `man/*.Rd`, qui se
+  perd dès qu'on édite une docstring sans repasser roxygen.
 
 ## 0.1.1 (2026-08-11)
 
