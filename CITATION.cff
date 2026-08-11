@@ -10,8 +10,8 @@ authors:
     affiliation: "INRAE, UR RiverLy, Villeurbanne, France"
 license: GPL-3.0-or-later
 repository-code: "https://github.com/lou-heraut/card4r"
-version: "0.1.0"
-date-released: "2026-08-05"
+version: "0.1.1"
+date-released: "2026-08-11"
 keywords:
   - hydrology
   - hydroclimatology

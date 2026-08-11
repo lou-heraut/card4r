@@ -31,10 +31,10 @@ of card4r therefore run the same code, and `card_config()` says which:
 ```r
 card_config()
 # python       : ~/.cache/R/reticulate/uv/cache/.../bin/python
-# card         : 0.4.0
-# card commit  : 7ede9638e44e00daea969d7a9797cf773e891ce8
-# stase        : 0.6.1
-# stase commit : 836dfae29f380e3b0b673b8ab0720af59067a91b
+# card         : 0.4.1
+# card commit  : …
+# stase        : 0.6.2
+# stase commit : …
 ```
 
 If you would rather supply your own Python, point at it before loading
@@ -122,9 +122,9 @@ The whole collection is browsable online:
 
 ```r
 card_list()                          # every variable, one per row
-card_list(phenomenon = "low flows")  # 114 variables
-card_list(output = "series")         # 267, versus scalar or curve
-card_list(operator = "delta")        # 83, the change between two periods
+card_list(phenomenon = "low flows")  # by hydrological phenomenon
+card_list(output = "series")         # a series, versus a scalar or a curve
+card_list(operator = "delta")        # the change between two periods
 card_info("VCN10", lang = "en")      # one card, drawn
 ```
 
@@ -152,16 +152,16 @@ the record. `h` says whether the trend is significant at the requested
 level, `0.1` by default, `a` is the Sen slope in the unit of the variable
 per year, and `a_relative` the same as a percentage of the mean.
 
-`card_trend()` takes the object `card_extract()` returned, in the same R
-session: it passes the table on as card produced it, rather than a
-translation of it.
+`card_trend()` takes the object `card_extract()` returned, and not a
+table you rebuilt yourself: it needs the time column as card handed it
+over, before card4r turned it into `Date` for you.
 
 ### What a result says about itself
 
 ```r
 res$meta[1, c("version", "swhid", "card_commit", "stase_commit")]
-#   version                swhid                              card_commit  stase_commit
-# 1     1.0 swh:1:cnt:e1197d4d…  7ede9638e44e00daea969d7a9797cf773e891ce8   836dfae29f…
+#   version                swhid card_commit stase_commit
+# 1     1.0 swh:1:cnt:e1197d4d…           …            …
 ```
 
 `version` is that of the **card**, which changes as soon as its outputs
@@ -184,9 +184,9 @@ same without running a computation.
 - **Re-export the hydrological functions** (`compute_FDC`, `get_BFI`...).
   They remain the internal machinery of the cards.
 
-These two limits are not gaps: they are what keeps the package at three
-hundred lines instead of a second engine to maintain. The day a function
-had to cross the bridge, the cost would go from a weekend to a year.
+These two limits are not gaps: they are what keeps the package a bridge
+instead of a second engine to maintain. The day a function had to cross
+the bridge, the cost would go from a weekend to a year.
 
 ## Coming from the CARD package
 

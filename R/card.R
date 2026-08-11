@@ -35,30 +35,31 @@
 #' @export
 card_extract <- function(data, cards = c("QA", "QJXA"), date_col = "date", ...) {
   stopifnot(is.data.frame(data))
-  py <- .card$extract(.to_py(data, date_col), cards = as.list(cards), ...)
+  py <- .avec_avertissements_r(
+    .card$extract(.to_py(data, date_col), cards = as.list(cards), ...))
   out <- .from_py(py)
-  # L'objet Python est conservé pour `card_trend()`, qui doit recevoir la
-  # table telle que card l'a produite (dtypes et métadonnées comprises) et
-  # non sa traduction en R.
-  attr(out, "py") <- py
+  # Ce que reçoit l'appelant a ses dates en `Date`. On garde à côté la
+  # table telle qu'elle arrive de card, AVANT `.rendre_les_dates()` :
+  # `card_trend()` la renvoie à Python, où une `POSIXct` UTC repart
+  # nativement en `datetime64` là où une `Date` repartirait en texte.
+  attr(out, "table_card") <- py
   out
 }
 
 #' Tester la stationnarité d'une extraction
 #'
-#' @param x Le résultat de [card_extract()], dans la même session R.
+#' @param x Le résultat de [card_extract()].
 #' @param ... Passé tel quel à `card.trend` : `level`, `mk`, `period`...
 #'
 #' @return Même forme que [card_extract()] : `data` et `meta`. La colonne
 #'   `h` dit si la tendance est significative, `a` est la pente de Sen.
 #' @export
 card_trend <- function(x, ...) {
-  py <- attr(x, "py")
-  if (is.null(py)) {
-    stop("card_trend() attend le retour de card_extract(), produit dans ",
-         "la meme session R.", call. = FALSE)
+  table <- attr(x, "table_card")
+  if (is.null(table)) {
+    stop("card_trend() attend le retour de card_extract().", call. = FALSE)
   }
-  .from_py(.card$trend(py, ...))
+  .from_py(.avec_avertissements_r(.card$trend(table, ...)))
 }
 
 #' Lister les fiches du corpus
@@ -68,7 +69,7 @@ card_trend <- function(x, ...) {
 #' @return Un data.frame, une ligne par variable.
 #' @export
 card_list <- function(...) {
-  .from_py(.card$list_cards(...))
+  .from_py(.avec_avertissements_r(.card$list_cards(...)))
 }
 
 #' Afficher une fiche
@@ -78,7 +79,7 @@ card_list <- function(...) {
 #' @return La figure, invisible, telle qu'elle est affichée.
 #' @export
 card_info <- function(name, lang = "fr") {
-  figure <- .card$figure(name, lang = lang)
+  figure <- .avec_avertissements_r(.card$figure(name, lang = lang))
   cat(figure, "\n")
   invisible(figure)
 }

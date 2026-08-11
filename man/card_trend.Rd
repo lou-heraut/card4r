@@ -7,7 +7,7 @@
 card_trend(x, ...)
 }
 \arguments{
-\item{x}{Le résultat de [card_extract()], dans la même session R.}
+\item{x}{Le résultat de [card_extract()].}
 
 \item{...}{Passé tel quel à `card.trend` : `level`, `mk`, `period`...}
 }
