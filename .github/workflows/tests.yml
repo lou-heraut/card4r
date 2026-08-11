@@ -33,9 +33,22 @@ jobs:
           r-version: release
           use-public-rspm: true
 
+      # `CARD` et `EXstat`, les paquets R historiques, sont installés
+      # exprès : sans eux le test de parité se saute, et c'est le seul qui
+      # éprouve ce que le README de CARD-R affirme à qui migre, à savoir
+      # que les valeurs ne changent pas et que c'est vérifié à chaque
+      # version de card4r. Une promesse publiée doit être tenue par une
+      # machine, pas par la mémoire de qui lance la suite. S'ils cessent
+      # de s'installer, cette CI passe au rouge, et c'est l'information
+      # que l'on veut : la parité n'est plus vérifiable.
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::testthat, any::pkgload, any::rcmdcheck
+          extra-packages: |
+            any::testthat
+            any::pkgload
+            any::rcmdcheck
+            github::lou-heraut/EXstat
+            github::lou-heraut/CARD-R
           needs: check
 
       # reticulate provisionne l'interpréteur, numpy, pandas, scipy, puis

@@ -42,6 +42,17 @@ Jamais au milieu d'un chantier. Le numéro vit dans `DESCRIPTION` et dans
   quel moteur ont tourné. Puis la suite refuse le moindre test sauté,
   compté à la main puisque testthat n'a pas de `stop_on_skip`.
 
+  **La garde a servi à son premier passage**, et sur le test qui compte
+  le plus : celui qui compare les valeurs à celles du paquet R
+  historique se sautait faute de `CARD` installé sur le runner. En local
+  il ne se voyait pas, `CARD` étant sur la machine de développement. Le
+  README de CARD-R annonce pourtant à qui migre que les valeurs ne
+  changent pas, « tested with every release of card4r » : la phrase
+  n'était vraie que si quelqu'un lançait la suite au bon endroit. `CARD`
+  et `EXstat` sont donc installés par la CI. S'ils cessent de
+  s'installer, elle passe au rouge, et c'est l'information que l'on
+  veut.
+
   Le cache du provisionnement porte `R/zzz.R`, seul fichier où
   `CARD_REF` et `STASE_REF` sont écrits : monter une ref invalide le
   cache, sans quoi la CI validerait l'ancien corpus. Un `R CMD check`
