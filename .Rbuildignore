@@ -4,3 +4,7 @@
 ^CLAUDE\.md$
 ^CHANGELOG\.md$
 ^CITATION\.cff$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^vignettes/articles$

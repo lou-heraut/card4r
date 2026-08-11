@@ -24,7 +24,56 @@ Jamais au milieu d'un chantier. Le numéro vit dans `DESCRIPTION` et dans
 
 ## Non publié
 
+Rien depuis la 0.1.2.
+
+## 0.1.2 (2026-08-11)
+
 ### Ajouté
+
+- **Le paquet a un site, et une page qui montre le geste qu'il sert
+  (2026-08-11).** pkgdown publie l'accueil depuis le README, la référence
+  depuis les cinq `man/*.Rd`, le journal depuis le CHANGELOG. **Aucune
+  page n'est écrite à la main**, et c'est la règle à tenir : une page
+  écrite est une page qui diverge. Le catalogue des variables n'est pas
+  republié mais renvoyé, une entrée de la barre menant au site de card,
+  parce qu'une seule copie est ce qui garantit qu'elle est juste.
+
+  Un article, un seul : **sélectionner une famille, puis la calculer**.
+  C'est le geste que le README ne montre pas, et c'est celui de la
+  vignette écrite en 2025 pour le paquet R, reprise ici. Elle filtrait
+  par expressions régulières sur un libellé et sur un chemin de fichier,
+  faute de classification ; les facettes de card et la colonne
+  `input_vars` font la même chose en le disant. Les données viennent
+  d'`airGRdatasets`, comme chez elle : rien n'est embarqué, rien n'est
+  téléchargé, et aucune variable n'est énumérée à la main.
+
+  L'article vit dans `vignettes/articles/`, pas dans `vignettes/` : là,
+  `R CMD build` l'ignore, donc son code ne s'exécute ni à l'installation
+  ni sous `R CMD check`. Seul le workflow du site le fait tourner, avec
+  le Python que la CI provisionne déjà et le même cache. Une vignette
+  ordinaire aurait obligé chaque installation à provisionner un
+  environnement Python complet, ou à publier du code mort en
+  `eval = FALSE`.
+
+  Deux choses mesurées en construisant le site, qui ne se devinent pas.
+  pkgdown rend **tout** `*.md` de la racine en page publiée, sans moyen
+  de l'en empêcher : `CLAUDE.md` s'est retrouvé dans le site et dans son
+  index de recherche, et le workflow le retire donc après construction.
+  Et son entrée « news » ne se câble que sur un `NEWS.md` : le journal
+  s'appelant `CHANGELOG.md` ici comme dans les trois autres dépôts, il
+  était rendu mais injoignable, d'où une entrée de barre explicite.
+  `docs/` n'est pas suivi : le site est un artefact, il se construit en
+  CI et se publie sur `gh-pages`.
+
+### Modifié
+
+- **`CARD_REF` monte en `v0.5.0` (2026-08-11).** La montée se publie
+  toujours, et celle-ci apporte ce que l'article utilise : `card_list()`
+  rend une colonne `card`, qui donne la fiche produisant chaque variable
+  et donc ce que `card_extract()` attend. Sans elle, enchaîner les deux
+  fonctions échouait dès qu'une fiche sort plusieurs colonnes, soit 73 %
+  des variables du corpus. Trouvé en portant la vignette. Détail : le
+  CHANGELOG de card.
 
 - **Les tests tournent enfin tout seuls (2026-08-11).** card4r était le
   seul des quatre dépôts sans intégration continue, alors que c'est celui

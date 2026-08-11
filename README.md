@@ -36,7 +36,7 @@ of card4r therefore run the same code, and `card_config()` says which:
 ```r
 card_config()
 # python       : ~/.cache/R/reticulate/uv/cache/.../bin/python
-# card         : 0.4.1
+# card         : 0.5.0
 # card commit  : …
 # stase        : 0.6.2
 # stase commit : …

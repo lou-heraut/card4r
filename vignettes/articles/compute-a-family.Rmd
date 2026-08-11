@@ -1,0 +1,132 @@
+---
+title: "Compute a whole family"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+You rarely want one variable. You want every low-flow indicator, or every
+temperature indicator your data can feed. The collection is queryable, so
+that is two lines rather than a list you maintain by hand.
+
+```{r setup}
+library(card4r)
+library(airGRdatasets)
+```
+
+## The data
+
+[airGRdatasets](https://cran.r-project.org/package=airGRdatasets) ships
+daily records for gauged French catchments, which is enough to run
+without downloading anything. Three of them, chosen for contrast:
+
+```{r}
+ids <- c("A273011002", "X031001001", "Y862000101")
+do.call(rbind, lapply(ids, function(i) {
+  d <- get(i)
+  data.frame(id = i, name = d$Meta$Name, area_km2 = round(d$Meta$Area))
+}))
+```
+
+card reads its input columns by name, so the only preparation is to give
+them the names the cards use: `Q` for discharge in m³·s⁻¹, `R` for
+precipitation, `T` for temperature, `ETP` for potential
+evapotranspiration. `card_list()` and `card_info()` state what each card
+needs.
+
+```{r}
+ts <- do.call(rbind, lapply(ids, function(i) {
+  d <- get(i)$TS
+  data.frame(id = i, date = as.Date(d$Date),
+             R = d$Ptot, T = d$Temp, ETP = d$Evap,
+             Q = d$Qls / 1000)          # airGRdatasets serves L/s
+}))
+str(ts)
+```
+
+## Select a family, then compute it
+
+Ask the collection for a family. Facets accept English or French, and the
+[catalogue](https://lou-heraut.github.io/card/CARDS) lists the values each
+one takes.
+
+```{r}
+temp <- card_list(domain = "temperature")
+nrow(temp)
+```
+
+Not all of those run on a temperature series alone: some compare
+discharge to temperature. You do not have to know which, the listing says
+so.
+
+```{r}
+table(temp$input_vars)
+```
+
+```{r}
+temp <- temp[temp$input_vars == "T", ]
+nrow(temp)
+```
+
+One row per **variable**. What you extract is a **card**, and one card can
+produce several variables: the twelve `mean-TMA_*` are the monthly columns
+of the single card `mean-TMA_month`. The `card` column holds that name.
+
+```{r}
+unique(temp$card)
+```
+
+That is the whole gesture:
+
+```{r}
+res <- card_extract(ts[, c("id", "date", "T")], cards = unique(temp$card))
+res$data[["mean-TA"]]
+```
+
+Which reads as a catchment gradient rather than as three numbers: the
+Bruche drains the Vosges foothills, the Durance at Embrun is alpine, and
+the Taravo is Corsican.
+
+The metadata comes with it, one row per variable produced, saying which
+card each one came from:
+
+```{r}
+head(res$meta[, c("card", "variable_en", "unit_en", "name_en")], 3)
+```
+
+## The same two lines, anywhere in the collection
+
+Nothing above is specific to temperature. Swap the facet and the input
+column:
+
+```{r}
+lf <- card_list(phenomenon = "low flows", output = "series")
+lf <- lf[lf$input_vars == "Q", ]
+c(variables = nrow(lf), cards = length(unique(lf$card)))
+```
+
+```{r}
+res <- card_extract(ts[, c("id", "date", "Q")], cards = unique(lf$card))
+head(res$data[["VCN10"]], 3)
+```
+
+`card_trend()` then tests every one of them, in one call:
+
+```{r}
+tr <- card_trend(res)
+tr$data[["VCN10"]][, c("id", "h", "p", "a")]
+```
+
+`h` is significance at the requested level, `0.1` by default, and `a` the
+Sen slope per year. None of these three is significant over twenty years,
+which is the honest answer for a record that short.
+
+## Where to look next
+
+This page shows a gesture, not an inventory. The variables themselves are
+published as a catalogue, in
+[English](https://lou-heraut.github.io/card/CARDS) and in
+[French](https://lou-heraut.github.io/card/CARDS.fr), generated from the
+cards so that it cannot drift from them. `card_info("VCN10")` draws a
+single card, step by step, in your console.

@@ -1,0 +1,52 @@
+# Site de documentation du paquet, publié sur GitHub Pages.
+#
+# Tout ce qu'il rend est GÉNÉRÉ depuis des fichiers qui existent déjà : le
+# README en page d'accueil, les `man/*.Rd` en référence, le CHANGELOG en
+# journal. Aucune page n'est écrite ici, et c'est la règle à tenir : une
+# page écrite à la main est une page qui diverge.
+#
+# Ce qui appartient au CORPUS n'est pas republié ici mais renvoyé, comme
+# dans le README : le catalogue des variables vit sur le site de card, et
+# n'en avoir qu'une copie est ce qui garantit qu'elle est juste.
+
+url: https://lou-heraut.github.io/card4r/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [reference, articles, changelog]
+    right: [search, catalogue, github]
+  components:
+    # pkgdown ne câble « news » que sur un `NEWS.md`, et le journal
+    # s'appelle `CHANGELOG.md` dans les quatre dépôts : sans cette
+    # entrée, il est rendu mais injoignable.
+    changelog:
+      text: Changelog
+      href: CHANGELOG.html
+    catalogue:
+      text: Catalogue
+      href: https://lou-heraut.github.io/card/CARDS
+
+reference:
+- title: Compute
+  desc: >
+    A data frame goes in, data frames and their metadata come out.
+  contents:
+  - card_extract
+  - card_trend
+
+- title: Browse the collection
+  desc: >
+    Find the variable you need, then read what it is. The full catalogue
+    is published on the card website.
+  contents:
+  - card_list
+  - card_info
+
+- title: Know what ran
+  desc: >
+    Which corpus and which engine answered, down to the commit.
+  contents:
+  - card_config
