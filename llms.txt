@@ -1,0 +1,276 @@
+# card4r
+
+**card4r** gives R access to the
+[card](https://github.com/lou-heraut/card) collection of hydroclimatic
+variables: low flows, floods, seasonality, climate change, computed on
+your own data.
+
+The collection and the engine are not rewritten in R, they are
+**called**. A `data.frame` goes in, `data.frame`s and their metadata
+come out. Which means the numbers you get are the same ones, to the last
+digit, whichever language you call them from.
+
+## Installation
+
+``` r
+
+# install.packages("remotes")
+remotes::install_github("lou-heraut/card4r")
+```
+
+There is nothing else to install. On the first call, card4r provisions
+the Python environment it needs on its own (interpreter, numpy, pandas,
+scipy, then `card` and `stase`), through
+[reticulate](https://rstudio.github.io/reticulate/). Expect a few
+hundred megabytes and a network connection, once. Nothing is installed
+system-wide: it lives in reticulate’s cache and can be deleted at any
+time, it will be rebuilt on the next call.
+
+Each release of card4r pins the **exact versions** of card and stase it
+calls, by tag rather than by branch. Two people running the same version
+of card4r therefore run the same code, and
+[`card_config()`](https://lou-heraut.github.io/card4r/reference/card_config.md)
+says which:
+
+``` r
+
+card_config()
+# python       : ~/.cache/R/reticulate/uv/cache/.../bin/python
+# card         : 0.5.0
+# card commit  : …
+# stase        : 0.6.2
+# stase commit : …
+```
+
+If you would rather supply your own Python, point at it before loading
+the package and card4r will provision nothing:
+
+``` r
+
+Sys.setenv(RETICULATE_PYTHON = "/path/to/python")
+```
+
+That is also the way to go behind a proxy that blocks the download, or
+on a machine without network access.
+
+## Using card4r
+
+### A first extraction
+
+The example below runs on a real record: the Yzeron at Craponne, a
+periurban catchment west of Lyon, gauged since 1970. The data comes from
+[Hub’Eau](https://hubeau.eaufrance.fr/), the French open hydrological
+API, which needs no key.
+
+``` r
+
+library(card4r)
+# install.packages("jsonlite")
+
+url <- paste0("https://hubeau.eaufrance.fr/api/v2/hydrometrie/obs_elab",
+              "?code_entite=V301501001&grandeur_hydro_elab=QmnJ",
+              "&date_debut_obs_elab=1970-01-01&size=20000")
+obs <- jsonlite::fromJSON(url)$data
+
+data <- data.frame(date = as.Date(obs$date_obs_elab),
+                   Q    = obs$resultat_obs_elab / 1000,   # Hub'Eau serves L/s
+                   id   = obs$code_station)
+# 19273 daily values, 1970-01-01 to 2022-10-26
+```
+
+Three columns are all card needs: a date, a series identifier, and the
+numeric columns the cards ask for (`Q` for discharge, `T` for
+temperature, `R` for precipitation). Then:
+
+``` r
+
+res <- card_extract(data, cards = c("QA", "VCN10"))
+
+head(res$data$QA, 3)
+#           id       date        QA
+# 1 V301501001 1969-09-01       NaN
+# 2 V301501001 1970-09-01 0.2967836
+# 3 V301501001 1971-09-01 0.2786175
+
+head(res$data$VCN10, 3)
+#           id       date  VCN10
+# 1 V301501001 1969-02-01    NaN
+# 2 V301501001 1970-02-01 0.0155
+# 3 V301501001 1971-02-01 0.0213
+```
+
+One `data.frame` per card. The first row is empty because the record
+starts mid-year, and the two cards do not use the same window: `QA` runs
+over the hydrological year starting in September, `VCN10` starts its
+year at the month of highest flows, February here.
+
+These are the same values, digit for digit, as the Python example in
+[card’s README](https://github.com/lou-heraut/card#a-first-extraction).
+That is the whole point of the package: one definition, one engine, two
+languages.
+
+Alongside the values, `res$meta` holds one row per variable produced:
+
+``` r
+
+res$meta[, c("variable_en", "unit_en", "name_en", "version")]
+#   variable_en      unit_en                                      name_en version
+# 1          QA m^{3}.s^{-1}                  Annual mean daily discharge     1.0
+# 2       VCN10 m^{3}.s^{-1} Annual minimum of 10-day mean daily discharge     1.1
+```
+
+It also carries the description, the classification, the method step by
+step and both languages, plus what it takes to trace the computation,
+which the last section of this part covers.
+
+### Finding your variable
+
+The whole collection is browsable online: **[the
+catalogue](https://lou-heraut.github.io/card/CARDS)**, and [in
+French](https://lou-heraut.github.io/card/CARDS.fr). From R:
+
+``` r
+
+card_list()                          # every variable, one per row
+card_list(phenomenon = "low flows")  # by hydrological phenomenon
+card_list(output = "series")         # a series, versus a scalar or a curve
+card_list(operator = "delta")        # the change between two periods
+card_info("VCN10", lang = "en")      # one card, drawn
+```
+
+Facets accept English as well as French (`output = "series"` or
+`output = "série"`).
+
+Card names are systematic and can be read rather than looked up: `QJXA`
+is discharge, daily, maximum, annual. The grammar is summarised at the
+top of the [catalogue](https://lou-heraut.github.io/card/CARDS) and
+given in full in
+[NOMENCLATURE.md](https://lou-heraut.github.io/card/dev/NOMENCLATURE).
+
+### Trend
+
+``` r
+
+tr <- card_trend(res)
+
+tr$data$VCN10[, c("id", "h", "p", "a", "a_relative")]
+#           id    h          p             a a_relative
+# 1 V301501001 TRUE 0.05671581 -0.0001151515  -1.069519
+```
+
+The low flows of this catchment decline by about **1.1 % per year** over
+the record. `h` says whether the trend is significant at the requested
+level, `0.1` by default, `a` is the Sen slope in the unit of the
+variable per year, and `a_relative` the same as a percentage of the
+mean.
+
+[`card_trend()`](https://lou-heraut.github.io/card4r/reference/card_trend.md)
+takes the object
+[`card_extract()`](https://lou-heraut.github.io/card4r/reference/card_extract.md)
+returned, and not a table you rebuilt yourself: it needs the time column
+as card handed it over, before card4r turned it into `Date` for you.
+
+### What a result says about itself
+
+``` r
+
+res$meta[1, c("version", "swhid", "card_commit", "stase_commit")]
+#   version                swhid card_commit stase_commit
+# 1     1.0 swh:1:cnt:e1197d4d…           …            …
+```
+
+`version` is that of the **card**, which changes as soon as its outputs
+change, and `swhid` identifies the card file itself in [Software
+Heritage](https://archive.softwareheritage.org/). The two commits
+identify the **software** that ran: a version number designates a unique
+state only on the day it is published, a commit always does.
+
+An exported result therefore says what produced it, which is what it
+takes to cite it or to replay it years later.
+[`card_config()`](https://lou-heraut.github.io/card4r/reference/card_config.md)
+prints the same without running a computation.
+
+## What card4r does not do, and will not do
+
+- **Write a card in R.** A card is a YAML file of the collection, and
+  that is what keeps a single definition for both languages. Writing or
+  contributing one happens in
+  [card](https://github.com/lou-heraut/card#writing-your-own), and the
+  card you write there is immediately usable from here.
+- **Re-export the hydrological functions** (`compute_FDC`, `get_BFI`…).
+  They remain the internal machinery of the cards.
+
+These two limits are not gaps: they are what keeps the package a bridge
+instead of a second engine to maintain. The day a function had to cross
+the bridge, the cost would go from a weekend to a year.
+
+## Coming from the CARD package
+
+[CARD](https://github.com/lou-heraut/CARD-R) is the original R package,
+where card comes from. It still installs and is not going away, but it
+is no longer developed: the living version is on the card side.
+
+Switching does not change your results. **Checked on 2026-08-05, values
+from `card4r` and from `CARD` match to 1.8e-15**, machine precision, and
+that comparison runs with this package’s test suite.
+
+| CARD (R) | card4r |
+|----|----|
+| `CARD_extraction(data, CARD_name = ...)` | `card_extract(data, cards = ...)` |
+| `CARD_list_all()` | [`card_list()`](https://lou-heraut.github.io/card4r/reference/card_list.md) |
+| `CARD_management(...)` | `card_info(...)` |
+
+The `expand_overwrite`, `rmNApct`, `rm_duplicates` and `dev` arguments
+of `CARD_extraction` have no counterpart: they went away with the port.
+card4r does not accept them, rather than ignore them silently.
+
+## The ecosystem
+
+|  |  |
+|----|----|
+| [card](https://github.com/lou-heraut/card) | the card collection, in Python |
+| [stase](https://github.com/lou-heraut/stase) | the aggregation and trend engine |
+| **card4r** | the same collection, called from R (you are here) |
+| [card-api](https://github.com/lou-heraut/card-api) | the web service, on Hub’Eau discharge data |
+| [CARD-R](https://github.com/lou-heraut/CARD-R) · [EXstat](https://github.com/lou-heraut/EXstat) | the historical R packages, superseded |
+
+## Licence and citation
+
+GPL-3. The collection, the engine and this package each have their own
+`CITATION.cff`. Cite the **cards** you used, with their version, which
+`res$meta` gives you.
+
+# Package index
+
+## Compute
+
+A data frame goes in, data frames and their metadata come out.
+
+- [`card_extract()`](https://lou-heraut.github.io/card4r/reference/card_extract.md)
+  : Calculer des variables hydroclimatiques
+- [`card_trend()`](https://lou-heraut.github.io/card4r/reference/card_trend.md)
+  : Tester la stationnarité d'une extraction
+
+## Browse the collection
+
+Find the variable you need, then read what it is. The full catalogue is
+published on the card website.
+
+- [`card_list()`](https://lou-heraut.github.io/card4r/reference/card_list.md)
+  : Lister les fiches du corpus
+- [`card_info()`](https://lou-heraut.github.io/card4r/reference/card_info.md)
+  : Afficher une fiche
+
+## Know what ran
+
+Which corpus and which engine answered, down to the commit.
+
+- [`card_config()`](https://lou-heraut.github.io/card4r/reference/card_config.md)
+  : L'environnement Python utilisé par card4r
+
+# Articles
+
+### All vignettes
+
+- [Compute a whole
+  family](https://lou-heraut.github.io/card4r/articles/compute-a-family.md):
