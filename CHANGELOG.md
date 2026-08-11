@@ -57,8 +57,12 @@ Rien depuis la 0.1.2.
 
   Deux choses mesurées en construisant le site, qui ne se devinent pas.
   pkgdown rend **tout** `*.md` de la racine en page publiée, sans moyen
-  de l'en empêcher : `CLAUDE.md` s'est retrouvé dans le site et dans son
-  index de recherche, et le workflow le retire donc après construction.
+  de l'en empêcher : sa fonction `package_mds()` globe, et sa liste
+  d'exceptions est en dur. `CLAUDE.md` s'est donc retrouvé dans le site.
+  Le retirer après construction ne suffit pas, mesuré sur le premier
+  déploiement : la page repart aussi en `.md`, dans `search.json` et
+  dans le sitemap. Le workflow l'écarte donc AVANT de construire, son
+  checkout étant jetable.
   Et son entrée « news » ne se câble que sur un `NEWS.md` : le journal
   s'appelant `CHANGELOG.md` ici comme dans les trois autres dépôts, il
   était rendu mais injoignable, d'où une entrée de barre explicite.

@@ -29,6 +29,16 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      # pkgdown rend TOUT `*.md` de la racine en page du site : sa
+      # fonction `package_mds()` globe, et sa liste d'exceptions est en
+      # dur, donc aucun réglage ne l'en empêche. `CLAUDE.md` est des
+      # instructions de travail, pas de la documentation. Le retirer
+      # APRÈS coup ne suffit pas, mesuré le 2026-08-11 : la page repart
+      # aussi en `.md`, dans `search.json` et dans le sitemap. On
+      # l'écarte donc avant, d'un checkout jetable.
+      - name: Écarter ce qui n'est pas de la documentation
+        run: rm -f CLAUDE.md
+
       - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r@v2
@@ -52,15 +62,6 @@ jobs:
       - name: Construire le site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
-
-      # pkgdown rend TOUT `*.md` de la racine en page du site, et n'offre
-      # aucun moyen de l'en empêcher (`package_mds()` globe, sa liste
-      # d'exceptions est en dur). `CLAUDE.md` est des instructions de
-      # travail, pas de la documentation : il est déjà lisible sur
-      # GitHub, il n'a rien à faire dans la navigation ni dans l'index de
-      # recherche du site.
-      - name: Retirer les pages que pkgdown ramasse sans qu'on lui demande
-        run: rm -f docs/CLAUDE.html
 
       - name: Publier sur gh-pages
         uses: JamesIves/github-pages-deploy-action@v4.7.3
