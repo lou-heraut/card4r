@@ -66,6 +66,12 @@ jobs:
       - name: Publier sur gh-pages
         uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
-          clean: false
+          # `clean: true` : la branche ne doit contenir QUE ce que la
+          # construction vient de produire. Avec `false`, un fichier
+          # déployé une fois y reste pour toujours, même quand le site
+          # ne le produit plus. C'est arrivé le 2026-08-11 avec
+          # `CLAUDE.md`, retiré de la construction mais toujours servi.
+          # Rien n'est déposé ici à la main, donc rien à préserver.
+          clean: true
           branch: gh-pages
           folder: docs
