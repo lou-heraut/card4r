@@ -8,7 +8,7 @@ card_list(...)
 }
 \arguments{
 \item{...}{Filtres de facette, en français ou en anglais :
-`phenomenon = "basses eaux"`, `output = "serie"`, `operator = "delta"`.}
+`phenomenon = "basses eaux"`, `output = "serie"`, `statistic = "change"`.}
 }
 \value{
 Un data.frame, une ligne par variable.

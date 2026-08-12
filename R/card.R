@@ -65,7 +65,7 @@ card_trend <- function(x, ...) {
 #' Lister les fiches du corpus
 #'
 #' @param ... Filtres de facette, en français ou en anglais :
-#'   `phenomenon = "basses eaux"`, `output = "serie"`, `operator = "delta"`.
+#'   `phenomenon = "basses eaux"`, `output = "serie"`, `statistic = "change"`.
 #' @return Un data.frame, une ligne par variable.
 #' @export
 card_list <- function(...) {
