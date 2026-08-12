@@ -13,7 +13,7 @@ card_list(...)
 - ...:
 
   Filtres de facette, en français ou en anglais : \`phenomenon = "basses
-  eaux"\`, \`output = "serie"\`, \`operator = "delta"\`.
+  eaux"\`, \`output = "serie"\`, \`statistic = "change"\`.
 
 ## Value
 
