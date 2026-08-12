@@ -24,7 +24,31 @@ Jamais au milieu d'un chantier. Le numéro vit dans `DESCRIPTION` et dans
 
 ## Non publié
 
-Rien depuis la 0.1.3.
+Rien depuis la 0.2.0.
+
+## 0.2.0 (2026-08-13)
+
+### Modifié
+
+- **`CARD_REF` monte en `v0.9.0` (2026-08-13).** La montée se publie
+  toujours, et celle-ci apporte surtout des CORRECTIONS, pas du confort :
+  six variables sortaient en se déclarant DATES alors que ce sont une
+  durée et un volume (`delta-dtLF`, `delta-vLF` et leurs variantes
+  saisonnières) ; `RAs` était rangée dans deux phénomènes selon la fiche
+  qui la produisait ; et sept variables portaient deux libellés anglais.
+  Détail : le CHANGELOG de card, version 0.9.0.
+
+### Retiré
+
+- **Le filtre `operator` de `card_list()` (2026-08-13).** Il disparaît
+  avec la colonne du même nom dans card 0.9.0, où elle était déduite du
+  PRÉFIXE d'un identifiant au lieu d'être déclarée par la fiche. La
+  facette `statistic` dit la même chose :
+  `card_list(operator = "delta")` devient `card_list(statistic = "change")`.
+  Table de conversion complète dans le `RENAMING.md` de card ; trois
+  valeurs demandent deux filtres, `operator = "mean"` devenant
+  `statistic = "mean", output = "scalar"`, ce qui est précisément
+  l'information que l'ancien filtre cachait.
 
 ## 0.1.3 (2026-08-12)
 
