@@ -19,8 +19,8 @@
 # de card4r doit toujours appeler le même code, sinon un résultat n'est
 # pas rejouable. Monter ces refs est un geste explicite, qui s'accompagne
 # d'une version de card4r.
-CARD_REF <- "v0.5.0"
-STASE_REF <- "v0.6.2"
+CARD_REF <- "v0.7.0"
+STASE_REF <- "v0.6.3"
 
 .card <- NULL
 .warnings <- NULL
