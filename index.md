@@ -36,9 +36,9 @@ says which:
 
 card_config()
 # python       : ~/.cache/R/reticulate/uv/cache/.../bin/python
-# card         : 0.5.0
+# card         : 0.7.0
 # card commit  : …
-# stase        : 0.6.2
+# stase        : 0.6.3
 # stase commit : …
 ```
 
@@ -134,12 +134,15 @@ French](https://lou-heraut.github.io/card/CARDS.fr). From R:
 card_list()                          # every variable, one per row
 card_list(phenomenon = "low flows")  # by hydrological phenomenon
 card_list(output = "series")         # a series, versus a scalar or a curve
-card_list(operator = "delta")        # the change between two periods
+card_list(statistic = "minimum")     # by the operation that produced it
+card_list(statistic = "change")      # the change between two periods
 card_info("VCN10", lang = "en")      # one card, drawn
 ```
 
 Facets accept English as well as French (`output = "series"` or
-`output = "série"`).
+`output = "série"`). `statistic` and `aspect` are orthogonal: `VCN10`
+and `tVCN10` are both a `minimum`, one being its value and the other its
+date.
 
 Card names are systematic and can be read rather than looked up: `QJXA`
 is discharge, daily, maximum, annual. The grammar is summarised at the

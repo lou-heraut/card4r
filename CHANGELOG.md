@@ -25,7 +25,35 @@ Jamais au milieu d’un chantier. Le numéro vit dans `DESCRIPTION` et dans
 
 ## Non publié
 
-Rien depuis la 0.1.2.
+Rien depuis la 0.1.3.
+
+## 0.1.3 (2026-08-12)
+
+### Modifié
+
+- **`CARD_REF` monte en `v0.7.0` et `STASE_REF` en `v0.6.3`
+  (2026-08-12).** La montée se publie toujours, et celle-ci apporte aux
+  utilisateurs R une classification qui n’existait pas : le corpus se
+  filtre désormais par l’OPÉRATION qui produit une variable,
+  `card_list(statistic = "minimum")`. Elle est orthogonale à `aspect` :
+  `VCN10` et `tVCN10` sont tous deux un minimum, l’un en magnitude,
+  l’autre en timing. Détail : le CHANGELOG de card, versions 0.6.0 et
+  0.7.0.
+
+  Le README montre `statistic` là où il montrait `operator`. Ce dernier
+  fonctionne encore, mais il est dérivé du PRÉFIXE de l’identifiant
+  d’une fiche et non déclaré, et son retrait est ouvert côté card : ne
+  pas l’enseigner évite d’avoir à le désenseigner.
+
+- **Le README ne force plus le trait sur la précision machine
+  (2026-08-11).** « the numbers you get are the same ones, to the last
+  digit » et « match to 1.8e-15, machine precision » disaient un fait
+  vrai et mesuré, deux fois sur la même page, avec le ton d’un argument
+  de vente. Le fait vit dans les fichiers de développement, où il sert.
+  La page dit maintenant que l’accord est mesuré par la suite de tests à
+  chaque version, ce qui est ce qui compte pour qui lit. Et le pluriel
+  de `data.frame`s tombait hors du bloc de code, donc détaché du mot à
+  l’affichage.
 
 ## 0.1.2 (2026-08-11)
 

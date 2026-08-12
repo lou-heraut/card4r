@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">card4r</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,18 @@
 </ul><p>Jamais au milieu d’un chantier. Le numéro vit dans <code>DESCRIPTION</code> et dans <code>CITATION.cff</code>, et <code>tests/testthat/test-version.R</code> refuse le désaccord.</p>
 <div class="section level2">
 <h2 id="non-publié">Non publié<a class="anchor" aria-label="anchor" href="#non-publi%C3%A9"></a></h2>
-<p>Rien depuis la 0.1.2.</p>
+<p>Rien depuis la 0.1.3.</p>
+</div>
+<div class="section level2">
+<h2 id="id_013-2026-08-12">0.1.3 (2026-08-12)<a class="anchor" aria-label="anchor" href="#id_013-2026-08-12"></a></h2>
+<div class="section level3">
+<h3 id="modifié">Modifié<a class="anchor" aria-label="anchor" href="#modifi%C3%A9"></a></h3>
+<ul><li>
+<p><strong><code>CARD_REF</code> monte en <code>v0.7.0</code> et <code>STASE_REF</code> en <code>v0.6.3</code> (2026-08-12).</strong> La montée se publie toujours, et celle-ci apporte aux utilisateurs R une classification qui n’existait pas : le corpus se filtre désormais par l’OPÉRATION qui produit une variable, <code>card_list(statistic = "minimum")</code>. Elle est orthogonale à <code>aspect</code> : <code>VCN10</code> et <code>tVCN10</code> sont tous deux un minimum, l’un en magnitude, l’autre en timing. Détail : le CHANGELOG de card, versions 0.6.0 et 0.7.0.</p>
+<p>Le README montre <code>statistic</code> là où il montrait <code>operator</code>. Ce dernier fonctionne encore, mais il est dérivé du PRÉFIXE de l’identifiant d’une fiche et non déclaré, et son retrait est ouvert côté card : ne pas l’enseigner évite d’avoir à le désenseigner.</p>
+</li>
+<li><p><strong>Le README ne force plus le trait sur la précision machine (2026-08-11).</strong> « the numbers you get are the same ones, to the last digit » et « match to 1.8e-15, machine precision » disaient un fait vrai et mesuré, deux fois sur la même page, avec le ton d’un argument de vente. Le fait vit dans les fichiers de développement, où il sert. La page dit maintenant que l’accord est mesuré par la suite de tests à chaque version, ce qui est ce qui compte pour qui lit. Et le pluriel de <code>data.frame</code>s tombait hors du bloc de code, donc détaché du mot à l’affichage.</p></li>
+</ul></div>
 </div>
 <div class="section level2">
 <h2 id="id_012-2026-08-11">0.1.2 (2026-08-11)<a class="anchor" aria-label="anchor" href="#id_012-2026-08-11"></a></h2>
@@ -62,7 +73,7 @@
 </li>
 </ul></div>
 <div class="section level3">
-<h3 id="modifié">Modifié<a class="anchor" aria-label="anchor" href="#modifi%C3%A9"></a></h3>
+<h3 id="modifié-1">Modifié<a class="anchor" aria-label="anchor" href="#modifi%C3%A9-1"></a></h3>
 <ul><li><p><strong><code>CARD_REF</code> monte en <code>v0.5.0</code> (2026-08-11).</strong> La montée se publie toujours, et celle-ci apporte ce que l’article utilise : <code><a href="reference/card_list.html">card_list()</a></code> rend une colonne <code>card</code>, qui donne la fiche produisant chaque variable et donc ce que <code><a href="reference/card_extract.html">card_extract()</a></code> attend. Sans elle, enchaîner les deux fonctions échouait dès qu’une fiche sort plusieurs colonnes, soit 73 % des variables du corpus. Trouvé en portant la vignette. Détail : le CHANGELOG de card.</p></li>
 <li>
 <p><strong>Les tests tournent enfin tout seuls (2026-08-11).</strong> card4r était le seul des quatre dépôts sans intégration continue, alors que c’est celui dont la promesse a le plus besoin d’être éprouvée : les valeurs R et Python coïncident, ce qu’aucune relecture ne peut affirmer. Le workflow installe R, provisionne le Python de reticulate et lance la suite à chaque poussée.</p>
@@ -80,7 +91,7 @@
 <strong>Un tag épinglé est confronté à ce qui répond vraiment (2026-08-11).</strong> <code>CARD_REF</code> et <code>STASE_REF</code> décident quel code calcule, et la promesse du paquet est que deux personnes sur la même version de card4r exécutent le même. Rien ne le vérifiait : <code><a href="reference/card_config.html">card_config()</a></code> était la seule des cinq fonctions exportées sans aucun test, alors que c’est celle que le README désigne pour répondre à la question. Le test compare maintenant les versions annoncées aux refs épinglées, et se saute quand <code>RETICULATE_PYTHON</code> impose un interpréteur, où elles ne s’appliquent pas.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="modifié-1">Modifié<a class="anchor" aria-label="anchor" href="#modifi%C3%A9-1"></a></h3>
+<h3 id="modifié-2">Modifié<a class="anchor" aria-label="anchor" href="#modifi%C3%A9-2"></a></h3>
 <ul><li><p><strong><code>CARD_REF</code> monte en <code>v0.4.1</code> et <code>STASE_REF</code> en <code>v0.6.2</code> (2026-08-11).</strong> C’est ce qui force cette version : ces deux constantes décident quel code calcule, et leur montée se publie toujours, sans quoi personne ne peut dire quel corpus a répondu en nommant une version de card4r. Ce que card4r gagne au passage se lit dans les journaux de card et de stase, pas ici : côté corpus, <code>list_cards</code> ne rend plus d’accolade de gabarit à qui cherche une variable ; côté moteur, deux correctifs d’emballage. Aucune valeur ne bouge.</p></li>
 <li>
 <p><strong>Les avertissements de card et de stase arrivent en <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code> R (2026-08-11).</strong> Ils étaient imprimés par Python lui-même sur la sortie d’erreur, avec le chemin du <code>.py</code> qui les émettait, et surtout ils échappaient à R : ni <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings()</a></code>, ni <code>options(warn = 2)</code>, ni <code>tryCatch</code> n’avaient prise dessus. Un utilisateur bouclant sur trois cents stations n’avait aucun moyen de les couper. Ils sont désormais interceptés par <code>warnings.catch_warnings()</code> et réémis en conditions R, dédoublonnés, une extraction multi-fiches répétant le même message une fois par fiche.</p>

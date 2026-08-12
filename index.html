@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">card4r</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,9 +71,9 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/card_config.html">card_config</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># python       : ~/.cache/R/reticulate/uv/cache/.../bin/python</span></span>
-<span><span class="co"># card         : 0.5.0</span></span>
+<span><span class="co"># card         : 0.7.0</span></span>
 <span><span class="co"># card commit  : …</span></span>
-<span><span class="co"># stase        : 0.6.2</span></span>
+<span><span class="co"># stase        : 0.6.3</span></span>
 <span><span class="co"># stase commit : …</span></span></code></pre></div>
 <p>If you would rather supply your own Python, point at it before loading the package and card4r will provision nothing:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -133,9 +133,10 @@
 <code class="sourceCode R"><span><span class="fu"><a href="reference/card_list.html">card_list</a></span><span class="op">(</span><span class="op">)</span>                          <span class="co"># every variable, one per row</span></span>
 <span><span class="fu"><a href="reference/card_list.html">card_list</a></span><span class="op">(</span>phenomenon <span class="op">=</span> <span class="st">"low flows"</span><span class="op">)</span>  <span class="co"># by hydrological phenomenon</span></span>
 <span><span class="fu"><a href="reference/card_list.html">card_list</a></span><span class="op">(</span>output <span class="op">=</span> <span class="st">"series"</span><span class="op">)</span>         <span class="co"># a series, versus a scalar or a curve</span></span>
-<span><span class="fu"><a href="reference/card_list.html">card_list</a></span><span class="op">(</span>operator <span class="op">=</span> <span class="st">"delta"</span><span class="op">)</span>        <span class="co"># the change between two periods</span></span>
+<span><span class="fu"><a href="reference/card_list.html">card_list</a></span><span class="op">(</span>statistic <span class="op">=</span> <span class="st">"minimum"</span><span class="op">)</span>     <span class="co"># by the operation that produced it</span></span>
+<span><span class="fu"><a href="reference/card_list.html">card_list</a></span><span class="op">(</span>statistic <span class="op">=</span> <span class="st">"change"</span><span class="op">)</span>      <span class="co"># the change between two periods</span></span>
 <span><span class="fu"><a href="reference/card_info.html">card_info</a></span><span class="op">(</span><span class="st">"VCN10"</span>, lang <span class="op">=</span> <span class="st">"en"</span><span class="op">)</span>      <span class="co"># one card, drawn</span></span></code></pre></div>
-<p>Facets accept English as well as French (<code>output = "series"</code> or <code>output = "série"</code>).</p>
+<p>Facets accept English as well as French (<code>output = "series"</code> or <code>output = "série"</code>). <code>statistic</code> and <code>aspect</code> are orthogonal: <code>VCN10</code> and <code>tVCN10</code> are both a <code>minimum</code>, one being its value and the other its date.</p>
 <p>Card names are systematic and can be read rather than looked up: <code>QJXA</code> is discharge, daily, maximum, annual. The grammar is summarised at the top of the <a href="https://lou-heraut.github.io/card/CARDS" class="external-link">catalogue</a> and given in full in <a href="https://lou-heraut.github.io/card/dev/NOMENCLATURE" class="external-link">NOMENCLATURE.md</a>.</p>
 </div>
 <div class="section level3">
