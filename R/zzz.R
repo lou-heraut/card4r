@@ -19,7 +19,7 @@
 # de card4r doit toujours appeler le même code, sinon un résultat n'est
 # pas rejouable. Monter ces refs est un geste explicite, qui s'accompagne
 # d'une version de card4r.
-CARD_REF <- "v0.10.0"
+CARD_REF <- "v0.11.0"
 STASE_REF <- "v0.6.3"
 
 .card <- NULL

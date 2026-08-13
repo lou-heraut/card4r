@@ -1,5 +1,5 @@
 Package: card4r
-Version: 0.3.0
+Version: 0.4.0
 Date: 2026-08-12
 Title: Hydroclimatic Variables from the CARD Collection, in R
 Description: A thin R front to the Python package 'card', which computes

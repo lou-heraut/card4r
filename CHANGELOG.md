@@ -24,7 +24,20 @@ Jamais au milieu d'un chantier. Le numéro vit dans `DESCRIPTION` et dans
 
 ## Non publié
 
-Rien depuis la 0.3.0.
+Rien depuis la 0.4.0.
+
+## 0.4.0 (2026-08-13)
+
+### Modifié
+
+- **`CARD_REF` monte en `v0.11.0` (2026-08-13).** Trois métadonnées de
+  fiche deviennent obligatoires côté card, ce qui ne change rien à
+  l'appel R mais supprime des silences : `is_date`, et les deux seuils de
+  lacunes. Surtout, `dtFlood` filtre désormais ses années lacunaires sur
+  l'étape qui réduit le journalier en maximum annuel, comme le faisait
+  déjà sa fiche jumelle `dtLF` : sur une chronique trouée, ses valeurs
+  peuvent changer. Idem pour `QJ` et `QJD`, seules du corpus à n'avoir
+  aucun seuil. Détail : le CHANGELOG de card, version 0.11.0.
 
 ## 0.3.0 (2026-08-13)
 
