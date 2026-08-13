@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/lou-heraut/card4r/blob/main/DESCRIPTION)
 
 Héraut L (2026). *card4r: Hydroclimatic Variables from the CARD
-Collection, in R*. R package version 0.2.0,
+Collection, in R*. R package version 0.3.0,
 <https://github.com/lou-heraut/card4r>.
 
     @Manual{,
       title = {card4r: Hydroclimatic Variables from the CARD Collection, in R},
       author = {Louis Héraut},
       year = {2026},
-      note = {R package version 0.2.0},
+      note = {R package version 0.3.0},
       url = {https://github.com/lou-heraut/card4r},
     }

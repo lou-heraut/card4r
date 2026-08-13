@@ -25,7 +25,22 @@ Jamais au milieu d’un chantier. Le numéro vit dans `DESCRIPTION` et dans
 
 ## Non publié
 
-Rien depuis la 0.2.0.
+Rien depuis la 0.3.0.
+
+## 0.3.0 (2026-08-13)
+
+### Modifié
+
+- **`CARD_REF` monte en `v0.10.0` (2026-08-13).** 49 valeurs de la
+  métadonnée `relative` changent, et la colonne gagne un troisième état.
+  Le champ dit ce que la GRANDEUR autorise : admet-elle une expression
+  relative. `null` y signifie désormais que la question ne se pose pas,
+  pour ce qui n’est pas une grandeur mesurée, comme le verdict d’un test
+  de Mann-Kendall. Côté R,
+  [`card_trend()`](https://lou-heraut.github.io/card4r/reference/card_trend.md)
+  en tient compte sans rien changer à son appel : `null` ne calcule pas
+  de pente relative, comme `false`. Détail : le CHANGELOG de card,
+  version 0.10.0, et la section 7 bis de son `NOMENCLATURE.md`.
 
 ## 0.2.0 (2026-08-13)
 
