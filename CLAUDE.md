@@ -14,9 +14,9 @@ l'autre, renvoyer.
 - `CHANGELOG.md` : ce qui a changé, quand, et la règle de coupe de
   version propre à ce paquet.
 - Le corpus, le moteur et le service ont chacun leur dépôt et leur
-  documentation : ne rien en consigner ici, et réciproquement. La
-  procédure de ménage documentaire commune aux quatre est
-  `../card/docs/dev/NETTOYAGE.md`.
+  documentation : ne rien en consigner ici, et réciproquement. Les
+  principes documentaires communs aux quatre dépôts sont dans
+  `../card/dev/decisions.md`.
 
 ## Structure
 
@@ -84,7 +84,7 @@ Un résultat porte déjà sa provenance : `res$meta` donne la version et le
 
 Cette section ne porte aucun état, elle dit où le lire : livré dans
 `CHANGELOG.md`, et pour le reste de l'écosystème R (sort des paquets
-historiques, gel de la référence) `../card/docs/dev/PLAN_R.md`.
+historiques, gel de la référence) `../card/dev/plans/2026-08-05_r-ecosystem.md`.
 
 Les paquets R historiques `../CARD-R/` et
 `../../EXstat_project/EXstat/` **restent sans fichiers IA** : on peut y
