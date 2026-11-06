@@ -65,7 +65,6 @@ values each one takes.
 ``` r
 
 temp <- card_list(domain = "temperature")
-#> Downloading uv...Done!
 nrow(temp)
 #> [1] 40
 ```
