@@ -1,0 +1,41 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "name": "card4r",
+  "description": "Front R mince vers le paquet Python card, qui calcule des variables hydroclimatiques définies par des fiches YAML et exécutées par le moteur stase. Le corpus et le moteur ne sont pas réimplémentés en R, ils sont appelés.",
+  "version": "0.4.0",
+  "datePublished": "2026-08-13",
+  "codeRepository": "https://github.com/lou-heraut/card4r",
+  "issueTracker": "https://github.com/lou-heraut/card4r/issues",
+  "license": "https://spdx.org/licenses/GPL-3.0-or-later",
+  "programmingLanguage": "R",
+  "author": [
+    {
+      "@type": "Person",
+      "familyName": "Héraut",
+      "givenName": "Louis",
+      "email": "louis.heraut@inrae.fr",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "INRAE, UR RiverLy, Villeurbanne, France"
+      }
+    }
+  ],
+  "keywords": [
+    "hydrologie",
+    "hydroclimatologie",
+    "étiage",
+    "analyse de tendance",
+    "R"
+  ],
+  "operatingSystem": [
+    "Linux",
+    "macOS",
+    "Windows"
+  ],
+  "softwareRequirements": [
+    "R >= 4.1",
+    "reticulate >= 1.41",
+    "card (Python), appelé par reticulate"
+  ]
+}
