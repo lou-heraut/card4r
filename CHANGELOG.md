@@ -25,7 +25,13 @@ Jamais au milieu d’un chantier. Le numéro vit dans `DESCRIPTION` et dans
 
 ## Non publié
 
-Rien depuis la 0.4.0.
+### Ajouté
+
+- **`codemeta.json`**, comme les trois autres dépôts de l’écosystème
+  (2026-11-06) : c’est le canal de description que lisent Software
+  Heritage et HAL. Il porte le numéro de version, donc un test le
+  confronte au `DESCRIPTION`, comme `CITATION.cff` ; il est exclu de la
+  construction du paquet.
 
 ## 0.4.0 (2026-08-13)
 
